@@ -7,3 +7,15 @@
     </form>
 {% endblock %}
 
+
+    {% for article in articles %}
+
+        <h1>{{ article["titre"] }}</h1>
+        <p>{{ article["résumé"] }}</p>
+        <p>{{ article["texte"] }}</p>
+        <p>{{ article["date"] }}</p>
+
+
+    
+    {% endfor %}
+{% endblock %}
