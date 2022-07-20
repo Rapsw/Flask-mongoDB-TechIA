@@ -12,6 +12,7 @@ app.config['SECRET_KEY'] = 'Secret'
 
 db = client.blog
 articles = db.article  # une collection article
+users = db.user
 
 @app.route("/", methods = ['GET','POST'])
 def accueil():
@@ -24,30 +25,35 @@ def accueil():
 
 @app.route('/article/<nom>')
 def article(nom):
-    return render_template("article.html", titre=nom)
+    article_selectionne = articles.find_one({"titre" : nom})
+    return render_template("article.html", article=article_selectionne)
 
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
-    utilisateur = {"login" : "antoine.meresse@info", "password" : "azerty"}
     form = Connexion()
     if form.validate_on_submit():
-        if form.data["login"] == utilisateur["login"] and form.data["password"] == utilisateur["password"]:
-            session["login"] = utilisateur["login"]
-            return redirect(url_for("acceuil"))
+        user = users.find_one({"nom" : form.data["username"],"mdp" : form.data["password"]})
+        if user is not None:
+            session["username"] = form.data["username"]
+            return redirect(url_for("accueil"))
+        else:
+            return redirect(url_for("register"))
     return render_template("login.html", form=form)
 
 #maj kamel
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    form = RegistrationForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = User(form.username.data, form.email.data,
-                    form.password.data)
-        db_session.add(user)
-        flash('Thanks for registering')
-        return redirect(url_for('login'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        new_user = {
+            "nom" : form.data["username"],
+            "mdp" : form.data["password"],
+            "mail" : form.data["email"],
+        }
+        users.insert_one(new_user)
+        return redirect(url_for("login"))
     return render_template('register.html', form=form)
         
 
