@@ -1,27 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title if title }}</title>
-    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
-</head>
-<body>
-    <div class="container">
-        <h1>Création de compte</h1>
-        <p>Merci de compléter le formulaire ci-dessous</p>
+{% extends "base.html" %}
 
-        <form action="" method="post">
-            <div class="form-group">
-              {{ form.email.label }}
-                {{ form.email }}
-            </div>
-            {{ form.submit }}
+{% block body %}
+<h1>Création de compte</h1>
+<p>Merci de compléter le formulaire ci-dessous</p>
+<form action="" method="post">
+    <div class="form-group">
+        {{ form.username.label }} <br>
+        {{ form.username }} <br>
+        {{ form.email.label }} <br>
+        {{ form.email }} <br>
+        {{ form.password.label }} <br>
+        {{ form.password() }} 
+    </div> <br> <br>
+    {{ form.submit }}
+    {{ form.csrf_token }}
 
-        </form>
-    </div>
-</body>
-</html>
+
+</form>
+{% endblock %}
