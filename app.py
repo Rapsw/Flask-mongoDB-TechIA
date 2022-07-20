@@ -9,12 +9,6 @@ client = MongoClient(url)
 
 app.config['SECRET_KEY'] = 'Secret'
 
-@app.route("/")
-def accueil():
-    form = Connexion()
-    
-    return render_template("accueil.html", form = form)
-
 db = client.blog
 articles = db.article  # une collection article
 

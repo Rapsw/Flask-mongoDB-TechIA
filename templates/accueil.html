@@ -5,12 +5,11 @@
         {{ form.login.label }} {{ form.login() }} <br>
         {{ form.password.label }} {{ form.password() }}
     </form>
-{% endblock %}
 
 
     {% for article in articles %}
 
-        <h1>{{ article["titre"] }}</h1>
+        <h1><a href="{{ url_for('article', nom = article['titre']) }}">{{ article["titre"] }}</a></h1>
         <p>{{ article["résumé"] }}</p>
         <p>{{ article["texte"] }}</p>
         <p>{{ article["date"] }}</p>
