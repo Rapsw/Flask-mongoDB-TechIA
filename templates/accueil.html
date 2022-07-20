@@ -1,13 +1,6 @@
 {% extends "base.html" %}
 
 {% block body %}
-    <form action="" method="post">
-        {{ form.login.label }} {{ form.login() }} <br>
-        {{ form.password.label }} {{ form.password() }}
-    </form>
-{% endblock %}
-
-
     {% for article in articles %}
 
         <h1>{{ article["titre"] }}</h1>

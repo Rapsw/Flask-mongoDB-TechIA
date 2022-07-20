@@ -19,7 +19,7 @@ def accueil():
     except:
         login = None
 
-    return render_template("accueil.html", form = form , articles = articles.find(), login=login)
+    return render_template("accueil.html", articles = articles.find(), login=login)
 
 @app.route('/article/<nom>')
 def article(nom):
