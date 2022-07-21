@@ -8,8 +8,7 @@ client = MongoClient(url)
 db = client.blog
  
 article = db.article  # une collection 
-users = db.user 
-admin = db.admin
+
 
 article.drop() #nettoyer la base de données 
 
@@ -33,7 +32,7 @@ article.insert_one ( {"titre" : "Réalisation Blog avec Flask et MongoDB" ,
     "date" :str(datetime.now()), 
     "texte" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum " } )
 
-users.insert_one ({})
+admin = db.admin
 admin.insert_one({"username": "admin", "email": " admin@gmail.com" , "password" : "mdp"})
 
 
