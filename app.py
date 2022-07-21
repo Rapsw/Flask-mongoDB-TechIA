@@ -43,7 +43,7 @@ def login():
 
 #maj kamel
 
-@app.route('/register', methods=['GET', 'POST'])
+@app.route('/register', methods=['GET', 'POST']) #get = utilisateur qui récupere  #post = utilisateur qui envoie 
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -57,3 +57,4 @@ def register():
             return redirect(url_for("login"))
         else:   
             return render_template('register.html', form=form)
+    return render_template('register.html', form=form)
