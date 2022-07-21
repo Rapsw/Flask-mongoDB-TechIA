@@ -52,11 +52,8 @@ def register():
             "mdp" : form.data["password"],
             "mail" : form.data["email"],
         }
-        users.insert_one(new_user)
-        return redirect(url_for("login"))
-    return render_template('register.html', form=form)
-        
-
-
-
-    
+        if users.find_one({"nom" : form.data["username"]}) is None and users.find_one({"mail" : form.data["email"]}) is None :
+            users.insert_one(new_user)
+            return redirect(url_for("login"))
+        else:   
+            return render_template('register.html', form=form)
