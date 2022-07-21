@@ -1,3 +1,4 @@
+from tokenize import String
 from flask_wtf import FlaskForm
 from datetime import datetime
 from wtforms import Form, BooleanField, StringField, PasswordField, validators, EmailField, SubmitField
@@ -16,3 +17,10 @@ class RegistrationForm(FlaskForm):
         validators.DataRequired()
     ])
     submit = SubmitField("Créer votre compte")
+
+class Ajout_article(FlaskForm):
+    titre = StringField('Titre:', [validators.Length(min=4, max=60)])
+    résumé = StringField('Résumé:', [validators.Length(min=4, max=60)])
+    texte = StringField('Texte')
+    submit = SubmitField("Créer votre article")
+
