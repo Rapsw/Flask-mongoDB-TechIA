@@ -1,3 +1,4 @@
+from collections import UserString
 from pymongo import MongoClient
 from datetime import datetime 
 
@@ -31,10 +32,24 @@ article.insert_one ( {"titre" : "Réalisation Blog avec Flask et MongoDB" ,
     "texte" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum " } )
 
 
+users =db.users # collection users
+
+users.drop()
+
+user1={"name":"name1","passeword":"passeword1","email":"email1"}
+user2={"name":"name2","passeword":"passeword2","email":"email2"}
+user3={"name":"name3","passeword":"passeword3","email":"email3"}
+user4={"name":"name4","passeword":"passeword4","email":"email4"}
+user5={"name":"name5","passeword":"passeword5","email":"email5"}
+
+users.insert_many([user1,user2,user3,user4,user5])
+
+
+
 # afficher la base de données 
 # afficher une collection
 #curseur = article.find_one({"titre" : "ARTICLE2"})
-curseur = article.find({})
+curseur = users.find({})
 print (curseur)
 
 for article in curseur:
