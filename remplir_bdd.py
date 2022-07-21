@@ -1,3 +1,4 @@
+from collections import UserString
 from pymongo import MongoClient
 from datetime import datetime 
 
@@ -36,10 +37,24 @@ users.insert_one ({})
 admin.insert_one({"username": "admin", "email": " admin@gmail.com" , "password" : "mdp"})
 
 
+users =db.users # collection users
+
+users.drop()
+
+user1={"name":"name1","passeword":"passeword1","email":"email1"}
+user2={"name":"name2","passeword":"passeword2","email":"email2"}
+user3={"name":"name3","passeword":"passeword3","email":"email3"}
+user4={"name":"name4","passeword":"passeword4","email":"email4"}
+user5={"name":"name5","passeword":"passeword5","email":"email5"}
+
+users.insert_many([user1,user2,user3,user4,user5])
+
+
+
 # afficher la base de données 
 # afficher une collection
 #curseur = article.find_one({"titre" : "ARTICLE2"})
-curseur = article.find({})
+curseur = users.find({})
 print (curseur)
 
 for article in curseur:
