@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block body %}
+    {% for commentaire in commentaires %}
+        <article>
+            {{ commentaire[2]}} <br>
+            <a href="{{ url_for('supprimer_comment', nom=commentaire[0], num_comm=commentaire[1]) }}">Supprimer le commentaire</a>
+            <a href="{{ url_for('valider_comment', nom=commentaire[0], num_comm=commentaire[1]) }}">Valider le commentaire</a>
+
+        </article>
+    {% endfor %}
+
+{% endblock %}
