@@ -55,12 +55,11 @@ def admin():
             return render_template("admin.html", form=form) #alors il est dirigé vers la page admin 
         if form.validate_on_submit():
             new_article = {
-                        "titre" : form.data["title"],
-                        "résumé": form.data["summary"],
-                        "texte": form.data["text"]
+                        "titre" : form.data["titre"],
+                        "résumé": form.data["résumé"],
+                        "texte": form.data["texte"]
                     }
             articles.insert_one(new_article)
-            return redirect(url_for("accueil"))
         else: 
             return redirect(url_for("accueil"))
     else:

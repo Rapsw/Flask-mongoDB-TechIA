@@ -38,6 +38,7 @@ admin.insert_one({"username": "admin", "email": " admin@gmail.com" , "password" 
 
 
 users = db.user # collection users
+users.drop()
 users.insert_one({ "nom" : "administrateur",
 "mdp":"mdp", 
 "mail" : "admin@gmail.com" ,
