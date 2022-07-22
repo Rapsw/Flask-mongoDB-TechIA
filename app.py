@@ -30,6 +30,7 @@ def accueil():
 
 @app.route('/article/<titre>',methods = ['GET','POST'])
 def article(titre): 
+    
     form =CommentaireForm()
     if form.validate_on_submit():
         new_commentaire = {
@@ -107,3 +108,9 @@ def register():
         else:   
             return render_template('register.html', form=form)
     return render_template('register.html', form=form)
+
+@app.route('/signout')
+def deconnexion():
+    if "username" in session:
+        session.pop("username")
+    return redirect(url_for("accueil"))

@@ -11,9 +11,19 @@
 <nav>
     <h1>Mon Super Blog sur l'IA !</h1>
     <a href="{{ url_for('accueil') }}">Accueil du Blog</a>
-    <a href="{{ url_for('login') }}">Se connecter</a>
-    <a href="{{ url_for('register') }}">Créer un compte</a>
+
+    {% block content %}
+
+    {% if 'username' in session  %}
+        <div> bonjour {{login}}</div>
+    {% else %}
+        <a href="{{ url_for('login') }}">Se connecter</a>
+        <a href="{{ url_for('register') }}">Créer un compte</a>
+    
+    {% endif %}
+    {% endblock content %}
 </nav>
+
 <body id="top">
     {% block body %}{% endblock %}
     <a id="btn-top" href="#top">^</a>
