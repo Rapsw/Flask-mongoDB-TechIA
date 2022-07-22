@@ -1,8 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-from formulaires import Connexion, RegistrationForm, AjoutArticle
+from formulaires import Connexion, Moderation_comment, RegistrationForm, Ajout_article
 from pymongo import MongoClient
 from wtforms import Form, BooleanField, StringField, validators, EmailField, SubmitField
-
 
 
 app = Flask(__name__)
@@ -48,22 +47,34 @@ def login():
 
 @app.route('/admin', methods = ['GET', 'POST']) # FONCTION ADMIN DANS LOGIN ET APP ROUTE ADMIN A PART
 def admin():
-    form = AjoutArticle()
+    form = Ajout_article()
 
     if session["username"] is not None: #si la session est active 
         utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
         if utilisateur["admin"]: 
-            if form.validate_on_submit():
-                new_article = {
-                    "titre" : form.data["titre"],
-                    "résumé": form.data["résumé"],
-                    "texte": form.data["texte"]
+            return render_template("admin.html", form=form) #alors il est dirigé vers la page admin 
+        if form.validate_on_submit():
+            new_article = {
+                        "titre" : form.data["titre"],
+                        "résumé": form.data["résumé"],
+                        "texte": form.data["texte"]
                     }
-                articles.insert_one(new_article)
+            articles.insert_one(new_article)
+        else: 
+            return redirect(url_for("accueil"))
+    else:
+        return render_template("login.html")
+        
 
-            return render_template("admin.html", form=form)
-        return render_template("accueil.html")
-    return render_template("login.html")
+@app.route('/admin/valider_comment/<nom>/<num_comm>')
+def valider_comment(nom,num_comm):
+    if session["username"] is not None:
+        utilisateur = users.find_one({"nom": session["username"]})
+        if utilisateur["admin"]: 
+            article_selectionne = articles.find_one({"titre" : nom})
+            liste_comm = article_selectionne["commentaires"]
+            liste_comm[int(num_comm)]["validé"] = True  #.pop pour supprimer
+            article.update_one({"titre" : nom}{"$set" : {"commentaires" : article["commentaire"]}})
     
     
 
@@ -85,5 +96,3 @@ def register():
         else:   
             return render_template('register.html', form=form)
     return render_template('register.html', form=form)
-
-    
