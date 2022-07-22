@@ -1,7 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request, session
 from formulaires import Connexion, Moderation_comment, RegistrationForm, Ajout_article
+from formulaires import Connexion, RegistrationForm,CommentaireForm
 from pymongo import MongoClient
 from wtforms import Form, BooleanField, StringField, validators, EmailField, SubmitField
+from datetime import datetime 
 
 
 app = Flask(__name__)
@@ -16,19 +18,30 @@ articles = db.article  # une collection article
 users = db.user
 admins = db.admin    
 
+
 @app.route("/", methods = ['GET','POST'])
 def accueil():
     try:
-        login = session["login"]
+        login = session["username"]
     except:
         login = None
 
     return render_template("accueil.html", articles = articles.find(), login=login)
 
-@app.route('/article/<nom>')
-def article(nom):
-    article_selectionne = articles.find_one({"titre" : nom})
-    return render_template("article.html", article=article_selectionne)
+@app.route('/article/<titre>',methods = ['GET','POST'])
+def article(titre): 
+    form =CommentaireForm()
+    if form.validate_on_submit():
+        new_commentaire = {
+            "user" : session["username"],
+            "date" : str(datetime.now()),
+            "texte": form.data["commentaire"],
+            }
+        article_page = articles.find_one({"titre":titre})
+        article_page["commentaires"].append(new_commentaire)
+        articles.update_one({"titre":titre},{"$set":{"commentaires":article_page["commentaires"]}})
+
+    return render_template("article.html", form=form, article=articles.find_one({"titre":titre}))
 
 
 @app.route('/login', methods = ['GET', 'POST'])

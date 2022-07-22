@@ -24,3 +24,9 @@ class AjoutArticle(FlaskForm):
     texte = StringField('Texte', [validators.Length(min=4, max=60)])
     submit = SubmitField("Créer votre article")
 
+class CommentaireForm(FlaskForm):
+    
+    commentaire = StringField('commentaire:')
+   
+    submit = SubmitField("envoyer le commentaire")
+    
