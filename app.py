@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-from formulaires import Connexion, Moderation_comment, RegistrationForm, Ajout_article
+from formulaires import Connexion, RegistrationForm, Ajout_article
 from formulaires import Connexion, RegistrationForm,CommentaireForm
 from pymongo import MongoClient
 from wtforms import Form, BooleanField, StringField, validators, EmailField, SubmitField
