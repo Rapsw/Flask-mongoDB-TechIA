@@ -15,9 +15,9 @@ articles.insert_one (
     "résumé" : "A l'aide de vos connaissances en Python et au logiciel Processing, vous simulerez  la vie et les interactions entre une population de proies et de prédateurs dans une mer de forme torique (forme de donuts)" ,
      "date" :str(datetime.now()), 
      "texte" : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum " , 
-    "commentaires":  [{"user": "user1", "date":str(datetime.now()),"texte": "test commentaire1"},
-                        {"user": "user2", "date":str(datetime.now()),"texte": "test commentaire2"},
-                        {"user": "user3", "date":str(datetime.now()),"texte": "test commentaire3"}
+    "commentaires":  [{"user": "user1", "date":str(datetime.now()),"texte": "test commentaire1", "validé" : False},
+                        {"user": "user2", "date":str(datetime.now()),"texte": "test commentaire2", "validé" : False},
+                        {"user": "user3", "date":str(datetime.now()),"texte": "test commentaire3", "validé" : False}
                         ]}) 
    
 
