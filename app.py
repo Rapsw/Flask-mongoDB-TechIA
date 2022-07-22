@@ -36,6 +36,7 @@ def article(titre):
             "user" : session["username"],
             "date" : str(datetime.now()),
             "texte": form.data["commentaire"],
+            "validé": False
             }
         article_page = articles.find_one({"titre":titre})
         article_page["commentaires"].append(new_commentaire)
