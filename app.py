@@ -74,7 +74,7 @@ def valider_comment(nom,num_comm):
             article_selectionne = articles.find_one({"titre" : nom})
             liste_comm = article_selectionne["commentaires"]
             liste_comm[int(num_comm)]["validé"] = True  #.pop pour supprimer
-            article.update_one({"titre" : nom}{"$set" : {"commentaires" : article["commentaire"]}})
+            article.update_one({"titre" : nom},{"$set" : {"commentaires" : article["commentaire"]}})
     
     
 
