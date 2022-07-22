@@ -43,7 +43,7 @@ users.insert_one({ "nom" : "administrateur",
 # afficher la base de données 
 # afficher une collection
 #curseur = article.find_one({"titre" : "ARTICLE2"})
-curseur = article.find({})
+curseur = articles.find({})
 print (curseur)
 
 for article in curseur:
