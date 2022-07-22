@@ -65,18 +65,16 @@ def admin():
     if session["username"] is not None: #si la session est active 
         utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
         if utilisateur["admin"]: 
-            return render_template("admin.html", form=form) #alors il est dirigé vers la page admin 
-        if form.validate_on_submit():
-            new_article = {
-                        "titre" : form.data["titre"],
-                        "résumé": form.data["résumé"],
-                        "texte": form.data["texte"]
-                    }
-            articles.insert_one(new_article)
-        else: 
-            return redirect(url_for("accueil"))
-    else:
-        return render_template("login.html")
+            if form.validate_on_submit():
+                new_article = {
+                    "titre" : form.data["titre"],
+                    "résumé": form.data["résumé"],
+                    "texte": form.data["texte"]
+                }
+                articles.insert_one(new_article)
+            return render_template("admin.html", form=form)
+        return render_template("accueil.html")
+    return render_template("login.html")
         
 
 @app.route('/admin/valider_comment/<nom>/<num_comm>')
