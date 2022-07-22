@@ -18,9 +18,9 @@ class RegistrationForm(FlaskForm):
     ])
     submit = SubmitField("Créer votre compte")
 
-class Ajout_article(FlaskForm):
+class AjoutArticle(FlaskForm):
     titre = StringField('Titre:', [validators.Length(min=4, max=60)])
     résumé = StringField('Résumé:', [validators.Length(min=4, max=60)])
-    texte = StringField('Texte')
+    texte = StringField('Texte', [validators.Length(min=4, max=60)])
     submit = SubmitField("Créer votre article")
 

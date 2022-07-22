@@ -1,7 +1,8 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-from formulaires import Connexion, RegistrationForm, Ajout_article
+from formulaires import Connexion, RegistrationForm, AjoutArticle
 from pymongo import MongoClient
 from wtforms import Form, BooleanField, StringField, validators, EmailField, SubmitField
+
 
 
 app = Flask(__name__)
@@ -47,23 +48,22 @@ def login():
 
 @app.route('/admin', methods = ['GET', 'POST']) # FONCTION ADMIN DANS LOGIN ET APP ROUTE ADMIN A PART
 def admin():
-    form = Ajout_article()
+    form = AjoutArticle()
 
     if session["username"] is not None: #si la session est active 
         utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
         if utilisateur["admin"]: 
-            return render_template("admin.html", form=form) #alors il est dirigé vers la page admin 
-        if form.validate_on_submit():
-            new_article = {
-                        "titre" : form.data["titre"],
-                        "résumé": form.data["résumé"],
-                        "texte": form.data["texte"]
+            if form.validate_on_submit():
+                new_article = {
+                    "titre" : form.data["titre"],
+                    "résumé": form.data["résumé"],
+                    "texte": form.data["texte"]
                     }
-            articles.insert_one(new_article)
-        else: 
-            return redirect(url_for("accueil"))
-    else:
-        return render_template("login.html")
+                articles.insert_one(new_article)
+
+            return render_template("admin.html", form=form)
+        return render_template("accueil.html")
+    return render_template("login.html")
     
     
 
