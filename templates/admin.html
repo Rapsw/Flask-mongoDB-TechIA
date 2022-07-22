@@ -11,9 +11,19 @@
         {{ form.résumé }} <br>
         {{ form.texte.label }} <br>
         {{ form.texte() }} </p>
-    </div> <br> <br>
+    </div> <br> 
     {{ form.submit }}
     {{ form.csrf_token }}
+
+    <div> <br> <br>
+        {{ form.titre.label }} <br>
+        {{ form.titre }} <br>
+        
+    </div> 
+        {{ form.submit() }}
+        {{ form.csrf_token }}
+
+
 
 </form>
 {% endblock %}

@@ -29,4 +29,11 @@ class CommentaireForm(FlaskForm):
     commentaire = StringField('commentaire:')
    
     submit = SubmitField("envoyer le commentaire")
+
+
+class Supprimer_article(FlaskForm):
+    supprimer = StringField("Supprimer article:")
+    submit = SubmitField("Supprimer")
+
+
     

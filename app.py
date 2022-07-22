@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, request, session
-from formulaires import Connexion, RegistrationForm, Ajout_article
+from formulaires import Connexion, RegistrationForm, Ajout_article, Supprimer_article
 from formulaires import Connexion, RegistrationForm,CommentaireForm
 from pymongo import MongoClient
 from wtforms import Form, BooleanField, StringField, validators, EmailField, SubmitField
@@ -42,6 +42,18 @@ def article(titre):
         articles.update_one({"titre":titre},{"$set":{"commentaires":article_page["commentaires"]}})
 
     return render_template("article.html", form=form, article=articles.find_one({"titre":titre}))
+
+    # fonction pour suppirmer un article
+
+@app.route('/admin/supprimer_article/<article_nom>',methods = ['GET','POST'])
+def supprimer_article(article_nom):
+    if session["username"] is not None: #si la session est active 
+        utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
+        if utilisateur["admin"]: 
+            articles.delete_one({"titre":article_nom})
+    return render_template("accueil.html")
+
+
 
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -107,3 +119,9 @@ def register():
         else:   
             return render_template('register.html', form=form)
     return render_template('register.html', form=form)
+
+@app.route('/signout')
+def deconnexion():
+    if "username" in session:
+        session.pop("username")
+    return redirect(url_for("accueil"))
