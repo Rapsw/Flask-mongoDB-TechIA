@@ -16,3 +16,10 @@ class RegistrationForm(FlaskForm):
         validators.DataRequired()
     ])
     submit = SubmitField("Créer votre compte")
+
+class CommentaireForm(FlaskForm):
+    
+    commentaire = StringField('commentaire:')
+   
+    submit = SubmitField("envoyer le commentaire")
+    

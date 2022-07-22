@@ -3,7 +3,7 @@
 {% block body %}
     {% for article in articles %}
 
-        <h1><a href="{{ url_for('article', nom = article['titre']) }}">{{ article["titre"] }}</a></h1>
+        <h1><a href="{{ url_for('article', titre = article['titre']) }}">{{ article["titre"] }}</a></h1>
         <p>{{ article["résumé"] }}</p>
         <p>{{ article["date"] }}</p>
 
