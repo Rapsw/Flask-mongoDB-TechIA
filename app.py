@@ -30,7 +30,6 @@ def accueil():
 
 @app.route('/article/<titre>',methods = ['GET','POST'])
 def article(titre): 
-    
     form =CommentaireForm()
     print(session)
     if form.validate_on_submit():
@@ -92,10 +91,31 @@ def valider_comment(nom,num_comm):
         if utilisateur["admin"]: 
             article_selectionne = articles.find_one({"titre" : nom})
             liste_comm = article_selectionne["commentaires"]
-            liste_comm[int(num_comm)]["validé"] = True  #.pop pour supprimer
-            article.update_one({"titre" : nom},{"$set" : {"commentaires" : article["commentaire"]}})
-    
-    
+            liste_comm[int(num_comm)]["validé"] == True  
+            articles.update_one({"titre" : nom},{"$set" : {"commentaires" : liste_comm}})
+    return redirect(url_for("accueil"))
+
+@app.route('/admin/supprimer_comment/<nom>/<num_comm>')
+def supprimer_comment(nom,num_comm):
+    if session["username"] is not None:
+        utilisateur = users.find_one({"nom": session["username"]})
+        if utilisateur["admin"]: 
+            article_selectionne = articles.find_one({"titre" : nom})
+            liste_comm = article_selectionne["commentaires"]
+            liste_comm.pop(int(num_comm))  #.pop pour supprimer
+            articles.update_one({"titre" : nom},{"$set" : {"commentaires" : liste_comm}})
+    return redirect(url_for("accueil"))
+
+
+@app.route('/admin/moderation')
+def moderation_comment():
+    liste_article = articles.find()
+    liste_comment = []
+    for elt in liste_article:
+        print(elt)
+        for i in range(len(elt["commentaires"])):
+            liste_comment.append((elt["titre"], i, elt["commentaires"][i]))
+    return render_template("moderation_comment.html", commentaires = liste_comment)
 
 #maj kamel
 
@@ -115,6 +135,7 @@ def register():
         else:   
             return render_template('register.html', form=form)
     return render_template('register.html', form=form)
+
 
 @app.route('/signout')
 def deconnexion():
