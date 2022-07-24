@@ -32,18 +32,24 @@ def accueil():
 def article(titre): 
     
     form =CommentaireForm()
+    print(session)
     if form.validate_on_submit():
-        new_commentaire = {
+        if "username" in session:
+            new_commentaire = {
             "user" : session["username"],
             "date" : str(datetime.now()),
             "texte": form.data["commentaire"],
             "validé": False
             }
-        article_page = articles.find_one({"titre":titre})
-        article_page["commentaires"].append(new_commentaire)
-        articles.update_one({"titre":titre},{"$set":{"commentaires":article_page["commentaires"]}})
-
+            article_page = articles.find_one({"titre":titre})
+            article_page["commentaires"].append(new_commentaire)
+            articles.update_one({"titre":titre},{"$set":{"commentaires":article_page["commentaires"]}})
+        else:
+            return redirect(url_for("login"))
+    
     return render_template("article.html", form=form, article=articles.find_one({"titre":titre}))
+    
+
 
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -63,19 +69,19 @@ def login():
 @app.route('/admin', methods = ['GET', 'POST']) # FONCTION ADMIN DANS LOGIN ET APP ROUTE ADMIN A PART
 def admin():
     form = Ajout_article()
-
-    if session["username"] is not None: #si la session est active 
-        utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
-        if utilisateur["admin"]: 
-            if form.validate_on_submit():
-                new_article = {
-                    "titre" : form.data["titre"],
-                    "résumé": form.data["résumé"],
-                    "texte": form.data["texte"]
-                }
-                articles.insert_one(new_article)
-            return render_template("admin.html", form=form)
-        return render_template("accueil.html")
+    if session["username"] is not None:
+        #si la session est active 
+            utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
+            if utilisateur["admin"]: 
+                if form.validate_on_submit():
+                    new_article = {
+                        "titre" : form.data["titre"],
+                        "résumé": form.data["résumé"],
+                        "texte": form.data["texte"]
+                    }
+                    articles.insert_one(new_article)
+                return render_template("admin.html", form=form)
+            return render_template("accueil.html")
     return render_template("login.html")
         
 
