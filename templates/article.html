@@ -20,4 +20,16 @@
             {{ form.submit() }}
             {{ form.csrf_token }}
     </form>
+    {% if form2 %}
+    <p>
+        Modifier l'article 
+        
+    </p>
+    <form action="" method="post">
+    {{ form2.nouveau_texte.label }} <br>
+    {{ form2.nouveau_texte }} <br>
+    {{ form2.submit }}
+    {{ form2.csrf_token }} <br>
+    </form>
+    {% endif %}
 {% endblock %}

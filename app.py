@@ -1,5 +1,6 @@
+from email.mime import nonmultipart
 from flask import Flask, render_template, redirect, url_for, request, session
-from formulaires import Connexion, RegistrationForm, Ajout_article
+from formulaires import Connexion, RegistrationForm, Ajout_article, Modifier_article
 from formulaires import Connexion, RegistrationForm,CommentaireForm
 from pymongo import MongoClient
 from wtforms import Form, BooleanField, StringField, validators, EmailField, SubmitField
@@ -31,18 +32,36 @@ def accueil():
 @app.route('/article/<titre>',methods = ['GET','POST'])
 def article(titre): 
     form =CommentaireForm()
-    if form.validate_on_submit():
-        new_commentaire = {
-            "user" : session["username"],
-            "date" : str(datetime.now()),
-            "texte": form.data["commentaire"],
-            "validé": False
-            }
-        article_page = articles.find_one({"titre":titre})
-        article_page["commentaires"].append(new_commentaire)
-        articles.update_one({"titre":titre},{"$set":{"commentaires":article_page["commentaires"]}})
-
-    return render_template("article.html", form=form, article=articles.find_one({"titre":titre}))
+    form2 = Modifier_article()
+    if session["username"] is not None: #si la session est active 
+        utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
+        if utilisateur["admin"]: 
+            if request.method == 'POST' : # si la requete post est effectue
+                if request.form["submit"] == "Modifiez l'article" : # si le bouton submit est égal a modifiez l'article
+                    if form2.validate_on_submit():
+                        article_modifie = {                     # ajout variable article modifie
+                            "titre_a_modifier" : titre ,
+                            "nouveau_texte": form2.data["nouveau_texte"]
+                        }
+                        nouveau_texte = article_modifie["nouveau_texte"]
+                        articles.update_one({"titre" : titre }, {"$set" : {"texte" : nouveau_texte}})
+    if request.method == 'POST' :
+        if request.form["submit"] == "envoyer le commentaire":
+            if form.validate_on_submit():
+                new_commentaire = {
+                    "user" : session["username"],
+                    "date" : str(datetime.now()),
+                    "texte": form.data["commentaire"],
+                    "validé": False
+                    }
+                article_page = articles.find_one({"titre":titre})
+                article_page["commentaires"].append(new_commentaire)
+                articles.update_one({"titre":titre},{"$set":{"commentaires":article_page["commentaires"]}})
+    if session["username"] is not None: #si la session est active 
+        utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
+        if utilisateur["admin"]: 
+            return render_template("article.html", form=form, form2= form2 , article=articles.find_one({"titre":titre}))
+        else: return render_template("article.html", form=form , article=articles.find_one({"titre":titre}))
 
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -62,18 +81,33 @@ def login():
 @app.route('/admin', methods = ['GET', 'POST']) # FONCTION ADMIN DANS LOGIN ET APP ROUTE ADMIN A PART
 def admin():
     form = Ajout_article()
+    form2 = Modifier_article()
 
     if session["username"] is not None: #si la session est active 
         utilisateur = users.find_one({"nom": session["username"]}) #variable utilisateur
         if utilisateur["admin"]: 
-            if form.validate_on_submit():
-                new_article = {
-                    "titre" : form.data["titre"],
-                    "résumé": form.data["résumé"],
-                    "texte": form.data["texte"]
-                }
-                articles.insert_one(new_article)
-            return render_template("admin.html", form=form)
+            if request.method == 'POST' : # si la requete post est active 
+                print(request.form["submit"]) # on affiche ce que represente le bouton submit
+                if request.form["submit"] == "Créer votre article" : 
+
+                    if form.validate_on_submit():
+                        new_article = {
+                            "titre" : form.data["titre"],
+                            "résumé": form.data["résumé"],
+                            "texte": form.data["texte"]
+                        }
+                        articles.insert_one(new_article)
+                if request.form["submit"] == "Modifiez l'article" :
+                    if form2.validate_on_submit():
+                        article_modifie = {                     # ajout variable article modifie
+                            "titre_a_modifier" : form2.data["titre_a_modifier"],
+                            "nouveau_texte": form2.data["nouveau_texte"]
+                        }
+                    if articles.find_one({"titre" : form2.data["titre_a_modifier"]}) is not None:
+                        nouveau_texte = article_modifie["nouveau_texte"]
+                        articles.update_one({"titre" : form2.data["titre_a_modifier"]}, {"$set" : {"texte" : nouveau_texte}})
+
+            return render_template("admin.html", form=form, form2=form2)
         return render_template("accueil.html")
     return render_template("login.html")
         

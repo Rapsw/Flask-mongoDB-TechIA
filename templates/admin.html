@@ -11,9 +11,19 @@
         {{ form.résumé }} <br>
         {{ form.texte.label }} <br>
         {{ form.texte() }} </p>
-    </div> <br> <br>
+    </div> 
     {{ form.submit }}
-    {{ form.csrf_token }}
-
+    {{ form.csrf_token }} <br>
 </form>
+    <p> Pour modifier un article, veuillez completer les champs ci-dessous </p>
+    
+<form action="" method="post"> 
+    {{ form2.titre_a_modifier.label }}<br>
+    {{ form2.titre_a_modifier }} <br>
+    {{ form2.nouveau_texte.label }} <br>
+    {{ form2.nouveau_texte }} <br>
+    {{ form2.submit }}
+    {{ form2.csrf_token }} <br>
+</form>
+
 {% endblock %}
